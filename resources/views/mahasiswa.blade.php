@@ -3,7 +3,7 @@
 @section('container')
     <h1 class="text-center">Data Mahasiswa</h1>
     <div class="mb-4">
-    <button type="button" class="btn btn-success ">Tambah Data</button>
+    <a href="mahasiswa/create"><button type="button" class="btn btn-success ">Tambah Data</button>
     </div>
     <div class="row">
         <table class="table">
@@ -24,10 +24,28 @@
                 <td>{{$mhs->nama}}</td>
                 <td>{{$mhs->nim}}</td>
                 <td>{{$mhs->jurusan}}</td>
-                <td>{{$mhs->ktm->nomor_identitas}}</td>
+                <td>{{$mhs->alamat}}</td>
+                {{-- <td>{{$mhs->ktm->nomor_identitas}}</td> --}}
                 <td>
-                    <button type="button" class="btn btn-primary">Update</button>
-                    <button type="button" class="btn btn-danger">Hapus</button>
+                    <a href="{{route('edit', $mhs->id_mahasiswa)}}"><button type="button" class="btn btn-primary">Update</button>
+                    {{-- <a href="{{route('delete', $mhs->id_mahasiswa)}}"><button type="button" class="btn btn-danger">Hapus</button> --}}
+                      <button onclick="destroy({{$mhs->id_mahasiswa}})" type="button" class="btn btn-danger">Hapus</button>
+                    <script>
+                      function destroy(id) {
+                          if (confirm('Apakah Anda yakin ingin menghapus mahasiswa ini?')) {
+                              fetch('/mahasiswa/destroy/' + id, {
+                                  method: 'DELETE',
+                                  headers: {
+                                      'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                  }
+                              }).then(response => {
+                                  location.reload();
+                              }).catch(error => {
+                                  console.error('Error:', error);
+                              });
+                          }
+                      }
+                  </script>
                 </td>
               </tr>
               @endforeach
